@@ -1,0 +1,8 @@
+.login-box {
+  border: 1px solid #c8c8c8;
+  width: 20rem;
+}
+
+.login-box:first-child {
+  margin-right: 20px;
+}
