@@ -1,9 +1,9 @@
-/* @import url(fonts.css); */
+@import url(fonts.css);
 @import url(https://pro.fontawesome.com/releases/v5.10.0/css/all.css);
 
 * {
   box-sizing: border-box;
-  /* font-family: NeogroteskEss-Regular; */
+  font-family: NeogroteskEss-Regular;
   line-height: 1.2em;
 }
 
