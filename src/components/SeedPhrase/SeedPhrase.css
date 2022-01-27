@@ -1,0 +1,12 @@
+.add-seedphrase-box {
+  border: 1px solid #c8c8c8;
+}
+
+.add-seedphrase-word:not(:last-child),
+.add-seedphrase-btns {
+  margin-right: 20px;
+}
+
+.add-seedphrase-wrap {
+  margin-top: 8rem;
+}

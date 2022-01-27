@@ -2588,13 +2588,13 @@ body {
 .btn-custom-5 {
   background-color: rgba(0, 0, 0, 0) !important;
   color: #16b99a !important;
-  border: 4px solid #16b99a !important;
+  border: 2px solid #16b99a !important;
 }
 .btn-custom-5:hover,
 .btn-custom-5:active,
 .btn-custom-5:focus {
   background-color: #16b99a !important;
-  border: 4px solid #16b99a !important;
+  border: 2px solid #16b99a !important;
   color: #ffffff !important;
 }
 .btn-custom-6 {
