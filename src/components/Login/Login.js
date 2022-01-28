@@ -1,6 +1,6 @@
 import './Login.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownload, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faKey, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 function Login() {
   return (
@@ -20,6 +20,12 @@ function Login() {
                         <FontAwesomeIcon className="mb-3" icon={faDownload} color="#C8C8C8" size="5x" />
                         <p className="neo-bold text-color-7 mb-0 font-size-120 mb-2">Add existing wallet</p>
                         <p className="text-color-7 mb-0 font-size-90 mb-4">Import your existing wallet using a 12-word seed phrase</p>
+                        <button className="btn btn-custom-2 w-100" type="button">Import Wallet</button>
+                    </div>
+                    <div className="login-box text-center p-4">
+                        <FontAwesomeIcon className="mb-3" icon={faKey} color="#C8C8C8" size="5x" />
+                        <p className="neo-bold text-color-7 mb-0 font-size-120 mb-2">Add using private key</p>
+                        <p className="text-color-7 mb-0 font-size-90 mb-4">Import your existing wallet using your own private key</p>
                         <button className="btn btn-custom-2 w-100" type="button">Import Wallet</button>
                     </div>
                 </div>

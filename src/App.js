@@ -7,7 +7,7 @@ function App() {
     return (
         <Router basename={process.env.PUBLIC_URL}>
             <div className="app h-100" style={{"backgroundColor": "rgb(244, 246, 248)"}}>
-                <AddSeedPhrase />
+                <Login />
             </div>
         </Router>
     );
