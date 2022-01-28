@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Login from './components/Login/Login'
 import AddSeedPhrase from './components/SeedPhrase/AddSeedPhrase'
 import Home from './components/Home/Home'
@@ -8,7 +8,11 @@ function App() {
     return (
         <Router basename={process.env.PUBLIC_URL}>
             <div className="app h-100" style={{"backgroundColor": "rgb(244, 246, 248)"}}>
-                <Home />
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/seedphrase" component={AddSeedPhrase} />
+                </Switch>
             </div>
         </Router>
     );

@@ -3,10 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 function AddSeedPhrase() {
+    const back = () => {
+        window.location.href = "/login";
+    }
+
     return (
         <div className="add-seedphrase">
             <div className="container">
-                <div className="d-flex pt-3 cursor-pointer">
+                <div onClick={back} className="d-flex pt-3 cursor-pointer">
                     <FontAwesomeIcon className="mb-3" icon={faChevronLeft} color="#333333" size="lg" />&nbsp;&nbsp;&nbsp;Back
                 </div>
 

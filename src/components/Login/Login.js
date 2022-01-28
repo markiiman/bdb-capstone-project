@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faKey, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { Button, Modal } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 function Login() {
     const [showImportSeedPhrase, setShowImportSeedPhrase] = useState(false)
@@ -26,7 +27,7 @@ function Login() {
                             <FontAwesomeIcon className="mb-3" icon={faPlus} color="#C8C8C8" size="5x" />
                             <p className="neo-bold text-color-7 mb-0 font-size-120 mb-2">Set up a new wallet</p>
                             <p className="text-color-7 mb-0 font-size-90 mb-4">This will create a new wallet and a 12-word seed phrase</p>
-                            <button className="btn btn-custom-2 w-100" type="button">Create a Wallet</button>
+                            <Link to="/seedphrase" className="btn btn-custom-2 w-100">Create a Wallet</Link>
                         </div>
                         <div className="login-box text-center p-4">
                             <FontAwesomeIcon className="mb-3" icon={faDownload} color="#C8C8C8" size="5x" />
