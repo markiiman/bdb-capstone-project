@@ -53,7 +53,7 @@ function Login() {
                 <Modal.Footer className="justify-content-center">
                     <button className="btn btn-custom-2" type="button">Import Wallet</button>
                     <Button className="neo-bold" variant="secondary" onClick={handleCloseImportSeedPhrase}>
-                        Close
+                        Cancel
                     </Button>
                 </Modal.Footer>
             </Modal>   
@@ -67,7 +67,7 @@ function Login() {
                 <Modal.Footer className="justify-content-center">
                     <button className="btn btn-custom-2" type="button">Import Wallet</button>
                     <Button className="neo-bold" variant="secondary" onClick={handleCloseImportPrivateKey}>
-                        Close
+                        Cancel
                     </Button>
                 </Modal.Footer>
             </Modal>   
@@ -80,11 +80,6 @@ function Login() {
                     </div>
                     <p className="app-loading-modal-content text-center font-size-140">Please wait...</p>
                 </Modal.Body>
-                <Modal.Footer className="justify-content-center">
-                    <Button className="neo-bold" variant="secondary" onClick={handleClosePleaseWait}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal> 
         </div>
     )

@@ -1,0 +1,61 @@
+.home {
+  padding: 3em 0;
+}
+
+.home-container {
+  box-shadow: 0 0 7px 0 rgb(0 0 0 / 8%);
+  margin: 0 auto;
+  background-color: #ffffff;
+  width: 70%;
+}
+
+.home-address,
+.home-btns-group {
+  border-bottom: 1px solid #c8c8c8;
+}
+
+.home-btn:not(:last-child) {
+  margin-right: 50px;
+  margin-bottom: 2em;
+}
+
+.home-btn-icon {
+  border-radius: 50%;
+  padding: 9px;
+  background-color: #16b99a;
+  width: 50px;
+  height: 50px;
+}
+
+.home-token-item {
+  padding: 20px 15px;
+  border-bottom: 1px solid #c8c8c8;
+}
+
+.token-img {
+  width: 5%;
+  border: 1px solid #c8c8c8;
+  padding: 5px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.home-add-tokens {
+  padding: 10px 0;
+}
+
+.home-add-tokens button {
+  border-radius: 25px;
+  padding: 10px 3 0px !important;
+}
+
+/* Remove arrows in number input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
