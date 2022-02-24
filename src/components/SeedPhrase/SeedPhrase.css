@@ -10,3 +10,44 @@
 .add-seedphrase-wrap {
   margin-top: 8rem;
 }
+
+.enter-seedphrase-wrap {
+  margin-top: 3rem;
+}
+
+.enter-seedphrase-container {
+  border: 1px solid #aaa;
+  width: 632px;
+  height: 185px;
+  max-height: 185px;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.sp-item {
+  border: 1px solid #aaa;
+  padding: 10px 0;
+  border-radius: 10px;
+  width: 140px;
+  margin: 5px;
+  text-align: center;
+}
+
+.esp-wrap {
+  width: 632px;
+  padding: 15px;
+}
+
+.sp-item.active {
+  background-color: #16b99a;
+  color: white;
+  border-color: #16b99a;
+}
+
+.esp-wrap .sp-item:hover:not(.active) {
+  background-color: #e5e5e5;
+}
+
+.sp-confirm {
+  width: 602px;
+}
