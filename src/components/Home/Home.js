@@ -9,6 +9,12 @@ function Home() {
     const [showImportToken, setShowImportToken] = useState(false)
     const handleCloseImportToken = () => setShowImportToken(false)
     const handleShowImportToken = () => setShowImportToken(true)
+    const [showSend, setShowSend] = useState(false)
+    const handleCloseSend = () => setShowSend(false)
+    const handleShowSend = () => setShowSend(true)
+    const [showReceive, setShowReceive] = useState(false)
+    const handleCloseReceive = () => setShowReceive(false)
+    const handleShowReceive = () => setShowReceive(true)
 
     return (
         <div className="home">
@@ -28,13 +34,13 @@ function Home() {
                     </div>
                     <div className="home-btns-group">
                         <div className="d-flex justify-content-center">
-                            <div className="home-btn cursor-pointer">
+                            <div onClick={handleShowSend} className="home-btn cursor-pointer">
                                 <div className="home-btn-icon mb-2">
                                     <FontAwesomeIcon icon={faUpload} size="2x" color="#ffffff" />
                                 </div>
                                 <p className="neo-light text-center text-color-3 font-size-90 mb-0">Send</p>
                             </div>
-                            <div className="home-btn cursor-pointer">
+                            <div onClick={handleShowReceive} className="home-btn cursor-pointer">
                                 <div className="home-btn-icon mb-2">
                                     <FontAwesomeIcon icon={faDownload} size="2x" color="#ffffff" />
                                 </div>
@@ -84,6 +90,45 @@ function Home() {
                     <Button className="neo-bold" variant="secondary" onClick={handleCloseImportToken}>
                         Cancel
                     </Button>
+                </Modal.Footer>
+            </Modal>  
+
+            {/* Modal for send */}
+            <Modal show={showSend} onHide={handleCloseSend} backdrop="static" keyboard={false} size="lg" centered>
+                <Modal.Body>
+                    <p className="font-size-130 text-center mb-3">Send Token</p>
+                    <div class="form-group mb-3">
+                        <label className="font-size-90 text-color-7 mb-2" for="token">Token</label>
+                        <select className="form-control" id="token">
+                            <option value="ETH">rETH</option>
+                            <option value="ODO">ODO</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label className="font-size-90 text-color-7 mb-2" for="amount">Amount</label>
+                        <input type="number" min="0.00" step="0.01" class="form-control" id="amount" />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer className="justify-content-center">
+                    <button className="btn btn-custom-2" type="button">Send</button>
+                    <Button className="neo-bold" variant="secondary" onClick={handleCloseSend}>
+                        Cancel
+                    </Button>
+                </Modal.Footer>
+            </Modal>  
+
+            {/* Modal for receive */}
+            <Modal show={showReceive} onHide={handleCloseReceive} backdrop="static" keyboard={false} size="lg" centered>
+                <Modal.Body>
+                    <p className="font-size-130 text-center mb-3">Receive Token</p>
+                    <div class="form-group mb-3">
+                        <label className="font-size-90 text-color-7 mb-2" for="address">Address</label>
+                        <input type="text" class="form-control" readonly id="address" value="0xabcdef123456abcdef123456abcdef123456" />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer className="justify-content-center">
+                    <button className="btn btn-custom-2" type="button">Copy</button>
+                    <Button className="neo-bold" variant="secondary" onClick={handleCloseReceive}>Close</Button>
                 </Modal.Footer>
             </Modal>  
         </div>
