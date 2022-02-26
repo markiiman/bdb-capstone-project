@@ -21,11 +21,11 @@ function Home() {
     }
 
     useEffect(() => {
-        if (localStorage.getItem('add') !== null) {
+        if (localStorage.getItem('add') !== null) { // wallet address is created
             _setState("signer", JSON.parse(localStorage.getItem('signer')))
             _setState("privateKey", localStorage.getItem('pk'))
             _setState("address", localStorage.getItem('add'))
-        } else {
+        } else { // no wallet address created yet
             window.location.href="/login"
         }
     })
@@ -83,7 +83,7 @@ function Home() {
                             <div className="token-img mb-0">
                                 <img src={ethereum} className="w-100" alt="Ethereum Logo" />
                             </div>
-                            <p className="text-color-6 font-size-130 mb-0">0 rETH</p>
+                            <p className="text-color-6 font-size-130 mb-0">0 ODO</p>
                         </div>
                     </div>
                     <div className="home-add-tokens text-center">
