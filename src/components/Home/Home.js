@@ -8,7 +8,10 @@ import { useEffect, useState } from 'react'
 // contract
 import { tokenAbi, tokenAddress } from '../../contracts/odoToken'
 
-function Home() {
+function Home(props) {
+    const provider = props.provider
+    const ethers = props.ethers
+
     const [state, setState] = useState({
         copyToClipboard: false,
         signer: [],
@@ -35,6 +38,9 @@ function Home() {
         } else { // no wallet address created yet
             window.location.href="/login"
         }
+
+        // insert web3 functions here
+
     }, [])
 
     useEffect(() => {
@@ -101,36 +107,8 @@ function Home() {
                             <p className="text-color-6 font-size-130 mb-0">0 ODO</p>
                         </div>
                     </div>
-                    <div className="home-add-tokens text-center">
-                        <button onClick={handleShowImportToken} type="button" className="btn btn-custom-5">Add Token</button>
-                    </div>
                 </div>
             </div>
-
-            {/* Modal for import token */}
-            <Modal show={showImportToken} onHide={handleCloseImportToken} backdrop="static" keyboard={false} size="lg" centered>
-                <Modal.Body>
-                    <p className="font-size-130 text-center mb-3">Import Token</p>
-                    <div className="form-group mb-3">
-                        <label className="font-size-90 text-color-7 mb-2" for="token-contract">Token Contract Address</label>
-                        <input type="text" className="form-control" id="token-contract" autoFocus />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className="font-size-90 text-color-7 mb-2" for="token-symbol">Token Symbol</label>
-                        <input type="text" className="form-control" id="token-symbol" />
-                    </div>
-                    <div className="form-group mb-3">
-                        <label className="font-size-90 text-color-7 mb-2" for="token-decimal">Token Decimal</label>
-                        <input type="number" className="form-control" id="token-decimal" value="0" min="0" />
-                    </div>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-2" type="button">Import Token</button>
-                    <Button className="neo-bold" variant="secondary" onClick={handleCloseImportToken}>
-                        Cancel
-                    </Button>
-                </Modal.Footer>
-            </Modal>  
 
             {/* Modal for send */}
             <Modal show={showSend} onHide={handleCloseSend} backdrop="static" keyboard={false} size="lg" centered>
