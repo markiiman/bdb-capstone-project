@@ -96,17 +96,17 @@ function Home() {
             <Modal show={showImportToken} onHide={handleCloseImportToken} backdrop="static" keyboard={false} size="lg" centered>
                 <Modal.Body>
                     <p className="font-size-130 text-center mb-3">Import Token</p>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="token-contract">Token Contract Address</label>
-                        <input type="text" class="form-control" id="token-contract" autoFocus />
+                        <input type="text" className="form-control" id="token-contract" autoFocus />
                     </div>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="token-symbol">Token Symbol</label>
-                        <input type="text" class="form-control" id="token-symbol" />
+                        <input type="text" className="form-control" id="token-symbol" />
                     </div>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="token-decimal">Token Decimal</label>
-                        <input type="number" class="form-control" id="token-decimal" value="0" min="0" />
+                        <input type="number" className="form-control" id="token-decimal" value="0" min="0" />
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
@@ -121,16 +121,16 @@ function Home() {
             <Modal show={showSend} onHide={handleCloseSend} backdrop="static" keyboard={false} size="lg" centered>
                 <Modal.Body>
                     <p className="font-size-130 text-center mb-3">Send Token</p>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="token">Token</label>
                         <select className="form-control" id="token">
                             <option value="ETH">rETH</option>
                             <option value="ODO">ODO</option>
                         </select>
                     </div>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="amount">Amount</label>
-                        <input type="number" min="0.00" step="0.01" class="form-control" id="amount" />
+                        <input type="number" min="0.00" step="0.01" className="form-control" id="amount" />
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
@@ -145,9 +145,9 @@ function Home() {
             <Modal show={showReceive} onHide={handleCloseReceive} backdrop="static" keyboard={false} size="lg" centered>
                 <Modal.Body>
                     <p className="font-size-130 text-center mb-3">Receive Token</p>
-                    <div class="form-group mb-3">
+                    <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="address">Address</label>
-                        <input type="text" class="form-control" readonly id="address" value="0xabcdef123456abcdef123456abcdef123456" />
+                        <input type="text" className="form-control" readOnly id="address" value="0xabcdef123456abcdef123456abcdef123456" />
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
