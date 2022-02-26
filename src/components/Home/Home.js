@@ -10,6 +10,7 @@ import { tokenAbi, tokenAddress } from '../../contracts/odoToken'
 
 function Home() {
     const [state, setState] = useState({
+        copyToClipboard: false,
         signer: [],
         privateKey: "", // for project purposes only
         address: "",
@@ -20,6 +21,12 @@ function Home() {
         setState(prevState => ({...prevState, [name]: value}))
     }
 
+    const copyClipboard = () => {
+        var obj = document.getElementById("address").select()
+        document.execCommand('copy')
+        _setState("copyToClipboard", true)
+    }
+
     useEffect(() => {
         if (localStorage.getItem('add') !== null) { // wallet address is created
             _setState("signer", JSON.parse(localStorage.getItem('signer')))
@@ -28,7 +35,15 @@ function Home() {
         } else { // no wallet address created yet
             window.location.href="/login"
         }
-    })
+    }, [])
+
+    useEffect(() => {
+        if (state.copyToClipboard) {
+            setTimeout(() => {
+                _setState("copyToClipboard", false)
+            }, 3000)
+        }
+    }, [state.copyToClipboard])
 
     const [showImportToken, setShowImportToken] = useState(false)
     const handleCloseImportToken = () => setShowImportToken(false)
@@ -147,11 +162,13 @@ function Home() {
                     <p className="font-size-130 text-center mb-3">Receive Token</p>
                     <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="address">Address</label>
-                        <input type="text" className="form-control" readOnly id="address" value="0xabcdef123456abcdef123456abcdef123456" />
+                        <input type="text" className="form-control" readOnly id="address" value={state.address} />
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-2" type="button">Copy</button>
+                    <button onClick={copyClipboard} className="btn btn-custom-2" type="button">
+                        {state.copyToClipboard ? "Copied!" : "Copy to Clipboard" }
+                    </button>
                     <Button className="neo-bold" variant="secondary" onClick={handleCloseReceive}>Close</Button>
                 </Modal.Footer>
             </Modal>  
