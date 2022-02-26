@@ -33,7 +33,8 @@
   text-align: center;
 }
 
-.esp-wrap {
+.esp-wrap,
+.sp-buttons {
   width: 632px;
   padding: 15px;
 }
@@ -48,6 +49,10 @@
   background-color: #e5e5e5;
 }
 
+.sp-buttons button {
+  width: 49%;
+}
+
 .sp-confirm {
-  width: 602px;
+  margin-right: 2%;
 }
