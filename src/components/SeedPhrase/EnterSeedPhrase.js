@@ -1,12 +1,80 @@
 import './SeedPhrase.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Modal } from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import { faChevronLeft, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 
 function EnterSeedPhrase() {
+    const [state, setState] = useState({
+        seedPhraseReview: [],
+        seedPhrase: [],
+        seedPhraseShuffled: [],
+        seedPhraseText: "",
+    })
+    
+    useEffect(() => {
+        _setState("seedPhrase", JSON.parse(localStorage.getItem('sp')))
+        _setState("seedPhraseShuffled", shuffle(JSON.parse(localStorage.getItem('sp'))))
+        _setState("seedPhraseText", localStorage.getItem('sptext'))
+    }, [])
+
     const back = () => {
         window.location.href = "/seedphrase";
+    }
+
+    const proceed = () => {
+        window.location.href = "/";
+    }
+
+    // state updater
+    const _setState = (name, value) => {
+        setState(prevState => ({...prevState, [name]: value}))
+    }
+
+    const addToSeedPhraseReview = (word, index) => {
+        if (state.seedPhraseReview.indexOf(word) == -1) {
+            _setState("seedPhraseReview", state.seedPhraseReview.concat(word))
+            
+            var obj = document.getElementById(`sp-item-${index}`)
+            obj.classList.add("active")
+        }
+    }
+
+    const confirm = () => {
+        const seedPhraseReviewText = state.seedPhraseReview.join(" ")
+        if (seedPhraseReviewText === state.seedPhraseText) {
+            handleShowSuccess()
+        } else {
+            handleShowError()
+        }
+    }
+
+    const clear = () => {
+        _setState("seedPhraseReview", [])
+        var objs = document.querySelectorAll('.active')
+
+        for (var i = 0; i < objs.length; i++) {
+            objs[i].classList.remove("active")
+        }
+    }
+
+    // array shuffler for seed phrase choices
+    const shuffle = arr => {
+        var currentIndex = arr.length,  randomIndex
+      
+        // While there remain elements to shuffle...
+        while (currentIndex !== 0) {
+      
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--
+      
+          // And swap it with the current element.
+          [arr[currentIndex], arr[randomIndex]] = [
+            arr[randomIndex], arr[currentIndex]]
+        }
+      
+        return arr
     }
 
     const [showSuccess, setShowSuccess] = useState(false)
@@ -29,37 +97,22 @@ function EnterSeedPhrase() {
 
                     <div className="enter-seedphrase-container">
                         <div className="d-flex flex-wrap justify-content-start align-items-start">
-                            <div className="sp-item">collection</div>
-                            <div className="sp-item">nft</div>
-                            <div className="sp-item">blockchain</div>
-                            <div className="sp-item">crypto</div>
-                            <div className="sp-item">governance</div>
-                            <div className="sp-item">token</div>
-                            <div className="sp-item">own</div>
-                            <div className="sp-item">rewards</div>
-                            <div className="sp-item">mustachio</div>
-                            <div className="sp-item">titans</div>
-                            <div className="sp-item">genesis</div>
-                            <div className="sp-item">block</div>
+                            {state.seedPhraseReview.map((x,k) => (
+                                <div className="sp-item" key={k}>{x}</div>
+                            ))}
                         </div>
                     </div>
 
                     <div className="esp-wrap d-flex flex-wrap justify-content-start align-items-start mb-3">
-                        <div className="cursor-pointer sp-item active">collection</div>
-                        <div className="cursor-pointer sp-item">nft</div>
-                        <div className="cursor-pointer sp-item">blockchain</div>
-                        <div className="cursor-pointer sp-item">crypto</div>
-                        <div className="cursor-pointer sp-item">governance</div>
-                        <div className="cursor-pointer sp-item">token</div>
-                        <div className="cursor-pointer sp-item">own</div>
-                        <div className="cursor-pointer sp-item">rewards</div>
-                        <div className="cursor-pointer sp-item">mustachio</div>
-                        <div className="cursor-pointer sp-item">titans</div>
-                        <div className="cursor-pointer sp-item">genesis</div>
-                        <div className="cursor-pointer sp-item">block</div>
+                        {state.seedPhraseShuffled.map((x,k) => (
+                            <div onClick={() => addToSeedPhraseReview(x, k)} id={`sp-item-${k}`} className="cursor-pointer sp-item" key={k}>{x}</div>
+                        ))}
                     </div>
-
-                    <button onClick={handleShowSuccess} className="sp-confirm btn btn-custom-2">CONFIRM</button>
+                    
+                    <div className="sp-buttons d-flex justify-content-center">
+                        <button onClick={confirm} className="sp-confirm btn btn-custom-2">CONFIRM</button>
+                        <button onClick={clear} className="btn btn-custom-5">CLEAR</button>
+                    </div>
                 </div>
             </div>
 
@@ -72,7 +125,7 @@ function EnterSeedPhrase() {
                     <p className="text-center">Congratulations! Your account is now created.</p>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-1 neo-bold" onClick={handleCloseSuccess} type="button">Close</button>
+                    <button className="btn btn-custom-1 neo-bold" onClick={proceed} type="button">Proceed</button>
                 </Modal.Footer>
             </Modal>  
 
@@ -80,7 +133,7 @@ function EnterSeedPhrase() {
             <Modal show={showError} onHide={handleCloseError} backdrop="static" keyboard={false} size="sm" centered>
                 <Modal.Body>
                     <div className="text-center mb-3">
-                        <FontAwesomeIcon color="yellow" size="6x" icon={faCheckCircle} />
+                        <FontAwesomeIcon color="red" size="6x" icon={faExclamationCircle} />
                     </div>
                     <p className="text-center">Your seed phrase doesn't match the records. Please try again.</p>
                 </Modal.Body>
