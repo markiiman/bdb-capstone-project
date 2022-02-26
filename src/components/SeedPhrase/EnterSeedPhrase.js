@@ -125,7 +125,7 @@ function EnterSeedPhrase() {
                     <p className="text-center">Congratulations! Your account is now created.</p>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-1 neo-bold" onClick={proceed} type="button">Proceed</button>
+                    <button className="btn btn-custom-2 neo-bold" onClick={proceed} type="button">Proceed</button>
                 </Modal.Footer>
             </Modal>  
 

@@ -3,9 +3,33 @@ import ethereum from '../../img/eth_logo.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons'
 import { Button, Modal } from 'react-bootstrap'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+// contract
+import { tokenAbi, tokenAddress } from '../../contracts/odoToken'
 
 function Home() {
+    const [state, setState] = useState({
+        signer: [],
+        privateKey: "", // for project purposes only
+        address: "",
+    })
+
+    // state updater
+    const _setState = (name, value) => {
+        setState(prevState => ({...prevState, [name]: value}))
+    }
+
+    useEffect(() => {
+        if (localStorage.getItem('add') !== null) {
+            _setState("signer", JSON.parse(localStorage.getItem('signer')))
+            _setState("privateKey", localStorage.getItem('pk'))
+            _setState("address", localStorage.getItem('add'))
+        } else {
+            window.location.href="/login"
+        }
+    })
+
     const [showImportToken, setShowImportToken] = useState(false)
     const handleCloseImportToken = () => setShowImportToken(false)
     const handleShowImportToken = () => setShowImportToken(true)
@@ -22,12 +46,12 @@ function Home() {
                 <div className="home-container">
                     <div className="home-address d-flex justify-content-between align-items-center mb-3">
                         <p className="neo-bold text-color-6 font-size-110 p-4 mb-0">BDB Crypto Wallet Project</p>
-                        <p className="neo-bold text-color-7 font-size-110 p-4 mb-0">0xabcdef123456abcdef123456abcdef123456</p>
+                        <p className="neo-bold text-color-7 font-size-110 p-4 mb-0">{state.address}</p>
                     </div>
                     <div className="home-acct">
                         <div className="text-center">
                             <div className="w-1/12 mx-auto mb-0">
-                                <img src={ethereum} classname="w-100" alt="Ethereum Logo" />
+                                <img src={ethereum} className="w-100" alt="Ethereum Logo" />
                             </div>
                             <p className="neo-bold text-color-6 font-size-200 mb-4">0 rETH</p>
                         </div>
@@ -51,13 +75,13 @@ function Home() {
                     <div className="home-tokens">
                         <div className="home-token-item d-flex align-items-center justify-content-start">
                             <div className="token-img mb-0">
-                                <img src={ethereum} classname="w-100" alt="Ethereum Logo" />
+                                <img src={ethereum} className="w-100" alt="Ethereum Logo" />
                             </div>
                             <p className="text-color-6 font-size-130 mb-0">0 rETH</p>
                         </div>
                         <div className="home-token-item d-flex align-items-center justify-content-start">
                             <div className="token-img mb-0">
-                                <img src={ethereum} classname="w-100" alt="Ethereum Logo" />
+                                <img src={ethereum} className="w-100" alt="Ethereum Logo" />
                             </div>
                             <p className="text-color-6 font-size-130 mb-0">0 rETH</p>
                         </div>
