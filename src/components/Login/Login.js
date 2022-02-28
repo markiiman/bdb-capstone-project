@@ -45,6 +45,24 @@ function Login(props) {
         }
     }
 
+    const importPrivateKey = () => {
+        try {
+            const importWallet = new ethers.Wallet(state.privateKeyInput, provider)
+
+            // // save items
+            localStorage.setItem("add", importWallet.address)
+            localStorage.setItem("pk", importWallet.privateKey)
+            localStorage.setItem("signer", JSON.stringify(importWallet))
+
+            handleShowSuccess()
+        } catch (e) {
+            console.log(e.message)
+            _setState("errorMsg", "Error: Cannot import wallet. Invalid private key!")
+            handleShowError()
+        }
+    }
+
+
     const storeSeedPhrase = () => {
         _setState("seedPhraseInput", document.getElementById("login-import-seedphrase").value)
     }
@@ -125,7 +143,7 @@ function Login(props) {
                     <textarea id="login-import-private-key" rows={3} className="form-control resize-none" placeholder="Enter your private key..." onChange={storePrivateKey}></textarea>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-2" type="button">Import Wallet</button>
+                    <button onClick={importPrivateKey} className="btn btn-custom-2" type="button">Import Wallet</button>
                     <Button className="neo-bold" variant="secondary" onClick={handleCloseImportPrivateKey}>
                         Cancel
                     </Button>
