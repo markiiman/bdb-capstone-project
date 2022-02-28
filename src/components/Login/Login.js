@@ -1,20 +1,79 @@
 import './Login.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownload, faKey, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faKey, faPlus, faSpinner, faCheckCircle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { Button, Modal } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-function Login() {
+function Login(props) {
+    const provider = props.provider
+    const ethers = props.ethers
+
+    console.log(ethers)
+
+    const [state, setState] = useState({
+        seedPhraseInput: "",
+        privateKeyInput: "",
+        errorMsg: "",
+    })
+
+    // state updater
+    const _setState = (name, value) => {
+        setState(prevState => ({...prevState, [name]: value}))
+    }
+    
+    const proceed = () => {
+        window.location.href = "/";
+    }
+
+    const importSeedPhrase = () => {
+        try {
+            const importWallet = ethers.Wallet.fromMnemonic(state.seedPhraseInput)
+            const signer = importWallet.connect(provider)
+
+            // save items
+            localStorage.setItem("sp", JSON.stringify(importWallet.mnemonic.phrase.split(" ")))
+            localStorage.setItem("sptext", importWallet.mnemonic.phrase)
+            localStorage.setItem("add", importWallet.address)
+            localStorage.setItem("pk", importWallet.privateKey)
+            localStorage.setItem("signer", JSON.stringify(signer))
+
+            handleShowSuccess()
+        } catch (e) {
+            _setState("errorMsg", "Error: Cannot import wallet. Invalid seedphrase!")
+            handleShowError()
+        }
+    }
+
+    const storeSeedPhrase = () => {
+        _setState("seedPhraseInput", document.getElementById("login-import-seedphrase").value)
+    }
+
+    const storePrivateKey = () => {
+        _setState("privateKeyInput", document.getElementById("login-import-private-key").value)
+    }
+
     const [showImportSeedPhrase, setShowImportSeedPhrase] = useState(false)
     const handleCloseImportSeedPhrase = () => setShowImportSeedPhrase(false)
     const handleShowImportSeedPhrase = () => setShowImportSeedPhrase(true)
     const [showImportPrivateKey, setShowImportPrivateKey] = useState(false)
     const handleCloseImportPrivateKey = () => setShowImportPrivateKey(false)
     const handleShowImportPrivateKey = () => setShowImportPrivateKey(true)
-    const [showPleaseWait, setShowPleaseWait] = useState(false)
-    const handleClosePleaseWait = () => setShowPleaseWait(false)
-    const handleShowPleaseWait = () => setShowPleaseWait(true)
+    // const [showPleaseWait, setShowPleaseWait] = useState(false)
+    // const handleClosePleaseWait = () => setShowPleaseWait(false)
+    // const handleShowPleaseWait = () => setShowPleaseWait(true)
+    const [showSuccess, setShowSuccess] = useState(false)
+    const handleCloseSuccess = () => setShowSuccess(false)
+    const handleShowSuccess = () => setShowSuccess(true)
+    const [showError, setShowError] = useState(false)
+    const handleCloseError = () => setShowError(false)
+    const handleShowError = () => setShowError(true)
+
+    useEffect(() => {
+        if (localStorage.getItem('add') !== null) { // wallet address is created
+            window.location.href="/"
+        }
+    }, [])
 
     return (
         <div className="login h-100">
@@ -49,21 +108,21 @@ function Login() {
             <Modal show={showImportSeedPhrase} onHide={handleCloseImportSeedPhrase} backdrop="static" keyboard={false} size="sm" centered>
                 <Modal.Body>
                     <p className="font-size-130">Import Seed Phrase</p>
-                    <textarea id="login-import-seedphrase" rows={5} className="form-control resize-none" placeholder="Enter 12-word seedphrase separated by space..."></textarea>
+                    <textarea id="login-import-seedphrase" rows={5} className="form-control resize-none" placeholder="Enter 12-word seedphrase separated by space..." onChange={storeSeedPhrase}></textarea>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-2" type="button">Import Wallet</button>
+                    <button onClick={importSeedPhrase} className="btn btn-custom-2" type="button">Import Wallet</button>
                     <Button className="neo-bold" variant="secondary" onClick={handleCloseImportSeedPhrase}>
                         Cancel
                     </Button>
                 </Modal.Footer>
-            </Modal>   
+            </Modal>
 
             {/* Modal for import private key */}
             <Modal show={showImportPrivateKey} onHide={handleCloseImportPrivateKey} backdrop="static" keyboard={false} size="sm" centered>
                 <Modal.Body>
                     <p className="font-size-130">Import Private Key</p>
-                    <textarea id="login-import-private-key" rows={3} className="form-control resize-none" placeholder="Enter your private key..."></textarea>
+                    <textarea id="login-import-private-key" rows={3} className="form-control resize-none" placeholder="Enter your private key..." onChange={storePrivateKey}></textarea>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
                     <button className="btn btn-custom-2" type="button">Import Wallet</button>
@@ -73,15 +132,41 @@ function Login() {
                 </Modal.Footer>
             </Modal>   
 
+            {/* Modal for successful */}
+            <Modal show={showSuccess} onHide={handleCloseSuccess} backdrop="static" keyboard={false} size="sm" centered>
+                <Modal.Body>
+                    <div className="text-center mb-3">
+                        <FontAwesomeIcon color="green" size="6x" icon={faCheckCircle} />
+                    </div>
+                    <p className="text-center">Congratulations! Your account is now imported.</p>
+                </Modal.Body>
+                <Modal.Footer className="justify-content-center">
+                    <button className="btn btn-custom-2 neo-bold" onClick={proceed} type="button">Proceed</button>
+                </Modal.Footer>
+            </Modal>  
+
+            {/* Modal for unsuccessful */}
+            <Modal show={showError} onHide={handleCloseError} backdrop="static" keyboard={false} size="sm" centered>
+                <Modal.Body>
+                    <div className="text-center mb-3">
+                        <FontAwesomeIcon color="red" size="6x" icon={faExclamationCircle} />
+                    </div>
+                    <p className="text-center">{state.errorMsg}</p>
+                </Modal.Body>
+                <Modal.Footer className="justify-content-center">
+                    <button className="btn btn-custom-1 neo-bold" onClick={handleCloseError} type="button">Close</button>
+                </Modal.Footer>
+            </Modal> 
+
             {/* Modal for waiting */}
-            <Modal show={showPleaseWait} onHide={handleClosePleaseWait} backdrop="static" keyboard={false} size="sm" centered>
+            {/* <Modal show={showPleaseWait} onHide={handleClosePleaseWait} backdrop="static" keyboard={false} size="sm" centered>
                 <Modal.Body>
                     <div className="text-center mb-3">
                         <FontAwesomeIcon color="grey" size="6x" icon={faSpinner} spin />
                     </div>
                     <p className="app-loading-modal-content text-center font-size-140">Please wait...</p>
                 </Modal.Body>
-            </Modal> 
+            </Modal>  */}
         </div>
     )
 }
