@@ -1,7 +1,8 @@
 import './Home.css'
 import ethereum from '../../img/eth_logo.svg'
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faDownload, faUpload } from '@fortawesome/free-solid-svg-icons'
+import { faDownload, faUpload, faPoop } from '@fortawesome/free-solid-svg-icons'
 import { Button, Modal } from 'react-bootstrap'
 import { useEffect, useState } from 'react'
 
@@ -17,9 +18,13 @@ function Home(props) {
         signer: [],
         privateKey: "", // for project purposes only
         ethBalance: 0, // for project purposes only
+        odoBalance: 0, // for project purposes only
+        odoContract: null, // for project purposes only
         address: "",
         sendSelectedToken: "",
         sendTokenAmount: "",
+        ethTransactions: "",
+        odoTransactions: "",
     })
 
     // state updater
@@ -33,26 +38,73 @@ function Home(props) {
         _setState("copyToClipboard", true)
     }
 
-    const sendToken = () => {
+    const sendToken = async () => {
+        var sendTokenButton = document.getElementById("send-token-button");
+        var hideSendTokenModalButton = document.getElementById("hide-send-token-modal-button");
+
+        sendTokenButton.disabled = true;
+        sendTokenButton.innerHTML = "Sending...";
+        hideSendTokenModalButton.classList.add("d-none");
+
         var token = document.getElementById("token").value;
         var recipient = document.getElementById("recipient").value;
         var amount = ethers.utils.parseEther(document.getElementById("amount").value);
-
-        console.log(token);
-        console.log(recipient);
-        console.log(amount);
-        console.log(provider);
-        console.log(state.privateKey);
-
         let wallet = new ethers.Wallet(state.privateKey, provider);
-        let tx = {
-            to: recipient,
-            value: amount
+
+        if(token === "ETH") {
+            let tx = {
+                to: recipient,
+                value: amount
+            }
+            wallet.sendTransaction(tx)
+                .then((txObj) => {
+                    sendTokenButton.disabled = false
+                    sendTokenButton.innerHTML = "Send";
+                    hideSendTokenModalButton.classList.remove("d-none");
+
+                    handleCloseSend();
+
+                    console.log('txHash', txObj.hash)
+
+                    const receipt = provider.waitForTransaction(txObj.hash, 1, 150000).then(() => {
+                        getBalances();
+                        getEthTransactions();
+                    });
+                })
+        } else {
+            let odoContract = state.odoContract.connect(wallet);
+            let tx = await odoContract.transfer(recipient, amount);
+            await tx.wait();
+
+            sendTokenButton.disabled = false
+            sendTokenButton.innerHTML = "Send";
+            hideSendTokenModalButton.classList.remove("d-none");
+
+            handleCloseSend();
+
+            getBalances();
+            getOdoTransactions();
         }
-        wallet.sendTransaction(tx)
-            .then((txObj) => {
-                console.log('txHash', txObj.hash)
-            })
+    }
+
+    const getEthTransactions = async () => {
+        let ethTransactions = await axios.get("https://api-ropsten.etherscan.io/api?module=account&action=txlist&address=0x0f3460B495958e256fd44aA0bD4b424bDbADBdAe&startblock=0&endblock=latest&page=1&offset=10&sort=desc&apikey=KHCSUR3QZTHMIQVA3NW7YJ6IBPG9W93N69")
+        _setState("ethTransactions", ethTransactions)
+    };
+
+    const getOdoTransactions = async () => {
+        let odoTransactions = await axios.get("https://api-ropsten.etherscan.io/api?module=account&action=tokentx&contractaddress=0xD9B6941c446e3322C761346E66aF9e710FC97de3&address=0x0f3460B495958e256fd44aA0bD4b424bDbADBdAe&page=1&offset=100&startblock=0&endblock=latest&sort=desc&apikey=YourApiKeyToken")
+        _setState("odoTransactions", odoTransactions)
+    };
+
+    const getBalances = async () => {
+        let ethBalance = ethers.utils.formatEther(await provider.getBalance(localStorage.getItem('add')), {pad: 5});
+        _setState("ethBalance", ethBalance)
+
+        let odoContract = new ethers.Contract(tokenAddress, tokenAbi, provider);
+        _setState("odoContract", odoContract)
+        let odoBalance = ethers.utils.formatEther(await odoContract.balanceOf(localStorage.getItem('add')));
+        _setState("odoBalance", odoBalance)
     }
 
     useEffect(() => {
@@ -61,18 +113,16 @@ function Home(props) {
             _setState("privateKey", localStorage.getItem('pk'))
             _setState("address", localStorage.getItem('add'))
 
-            async function getEthBalance() {
-                let ethBalance = ethers.utils.formatEther(await provider.getBalance(localStorage.getItem('add')));
-                _setState("ethBalance", ethBalance)
-            }
+            console.log(provider);
 
-            getEthBalance();
+            getBalances();
+            getEthTransactions();
         } else { // no wallet address created yet
             window.location.href="/login"
         }
         // insert web3 functions here
 
-    }, [])
+    }, [provider])
 
     useEffect(() => {
         if (state.copyToClipboard) {
@@ -105,7 +155,7 @@ function Home(props) {
                             <div className="w-1/12 mx-auto mb-0">
                                 <img src={ethereum} className="w-100" alt="Ethereum Logo" />
                             </div>
-                            <p className="neo-bold text-color-6 font-size-200 mb-4">{ state.ethBalance } rETH</p>
+                            <p className="neo-bold text-color-6 font-size-200 mb-4">{ parseFloat(state.ethBalance).toFixed(5) } rETH</p>
                         </div>
                     </div>
                     <div className="home-btns-group">
@@ -129,13 +179,13 @@ function Home(props) {
                             <div className="token-img mb-0">
                                 <img src={ethereum} className="w-100" alt="Ethereum Logo" />
                             </div>
-                            <p className="text-color-6 font-size-130 mb-0">{ state.ethBalance } rETH</p>
+                            <p className="text-color-6 font-size-130 mb-0">{ parseFloat(state.ethBalance).toFixed(5) } rETH</p>
                         </div>
                         <div className="home-token-item d-flex align-items-center justify-content-start">
-                            <div className="token-img mb-0">
-                                <img src={ethereum} className="w-100" alt="Ethereum Logo" />
+                            <div className="token-img mb-0 p-2" style={{'height':'44px'}}>
+                                <img src="https://elephant.art/wp-content/uploads/2019/11/poop-emoji.jpg" className="w-100" alt="Ethereum Logo" />
                             </div>
-                            <p className="text-color-6 font-size-130 mb-0">0 ODO</p>
+                            <p className="text-color-6 font-size-130 mb-0">{ parseFloat(state.odoBalance).toFixed(5) } ODO</p>
                         </div>
                     </div>
                 </div>
@@ -154,16 +204,16 @@ function Home(props) {
                     </div>
                     <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="recipient">Recipient</label>
-                        <input type="text" className="form-control" id="recipient"/>
+                        <input type="text" className="form-control" placeholder="0x7e19..." id="recipient"/>
                     </div>
                     <div className="form-group mb-3">
                         <label className="font-size-90 text-color-7 mb-2" for="amount">Amount</label>
-                        <input type="number" min="0.00" step="0.01" className="form-control" id="amount" />
+                        <input type="number" min="0.00" step="0.01" placeholder="1" className="form-control" id="amount" />
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="justify-content-center">
-                    <button className="btn btn-custom-2" type="button" onClick={sendToken}>Send</button>
-                    <Button className="neo-bold" variant="secondary" onClick={handleCloseSend}>
+                    <button className="btn btn-custom-2" type="button" id="send-token-button" onClick={sendToken}>Send</button>
+                    <Button className="neo-bold" variant="secondary" id="hide-send-token-modal-button" onClick={handleCloseSend}>
                         Cancel
                     </Button>
                 </Modal.Footer>

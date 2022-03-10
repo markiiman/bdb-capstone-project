@@ -1,5 +1,5 @@
 // Cake-LP Token Contract and ABI
-const tokenAddress = "0xF5dfC64e8Df1198bA59aB0010Fee33B2Db9D33F1"
+const tokenAddress = "0xD9B6941c446e3322C761346E66aF9e710FC97de3"
 const tokenAbi = [
     {
         "inputs":[
